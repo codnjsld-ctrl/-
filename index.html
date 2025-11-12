@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>가톨릭대 캠퍼스맵 장애인용</title>
+
+  <meta name="description" content="가톨릭대 캠퍼스 접근성 지도 - 엘리베이터, 자동문, 무계단 경로 안내" />
+  <meta name="theme-color" content="#2563eb" />
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="manifest" href="manifest.json">
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js').catch(console.warn);
+      });
+    }
+  </script>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Leaflet Routing Machine CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <h1>가톨릭대 캠퍼스맵 장애인용</h1>
+    <div class="actions">
+      <div class="route-mini" role="search">
+        <input id="from" placeholder="출발지" />
+        <span class="sep">→</span>
+        <input id="to" placeholder="도착지" />
+        <button id="routeBtn" type="button" title="경로 탐색">길찾기</button>
+      </div>
+
+      <button id="locateBtn" type="button">내 위치</button>
+
+      <select id="profile">
+        <option value="default">일반</option>
+        <option value="wheelchair">휠체어 사용자</option>
+        <option value="vision">시각장애</option>
+      </select>
+
+      <!-- 장소검색 입력 제거 -->
+      <!-- <input id="search" placeholder="장소 검색 (예: 김수환관)" /> -->
+
+      <button id="ttsBtn">현재 경로 음성안내</button>
+      <label style="display:flex;gap:6px;align-items:center;margin-left:8px;">
+        <input type="checkbox" id="autotrack" checked /> 자동 추적
+      </label>
+      <label style="display:flex;gap:6px;align-items:center;margin-left:8px;">
+        <input type="checkbox" id="toggleElev" checked /> 엘리베이터
+      </label>
+      <label style="display:flex;gap:6px;align-items:center;margin-left:8px;">
+        <input type="checkbox" id="toggleDoors" checked /> 자동문
+      </label>
+    </div>
+  </header>
+
+  <main>
+    <div id="map"></div>
+    <aside id="panel">
+      <div class="panel-grid">
+        <section id="panel-left" aria-label="실시간 혼잡 정보">
+          <h2>혼잡도</h2>
+          <div id="rt-panel" aria-live="polite"></div>
+        </section>
+        <section id="panel-right">
+          <section class="info-panel">
+            <h2>정보 패널</h2>
+            <div id="info">마커를 클릭하면 접근성 정보를 보여줍니다.</div>
+          </section>
+        </section>
+      </div>
+      <div id="rt-widget" aria-live="polite"></div>
+    </aside>
+  </main>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+  <script src="app.js"></script>
+  <div id="coordbox" aria-live="polite"></div>
+</body>
+</html>

@@ -1,0 +1,34 @@
+{
+  "places": [
+    {
+      "id": "A-101",
+      "name": "김수환관",
+      "lat": 37.5005,
+      "lng": 126.96,
+      "amenities": { "elevator": true, "ramp": true, "autoDoor": false }
+ 
+    },
+    {
+      "id": "B-201",
+      "name": "도서관",
+      "lat": 37.5011,
+      "lng": 126.9609,
+      "amenities": { "elevator": true, "ramp": true, "autoDoor": true }
+    
+    },
+    {
+      "id": "C-301",
+      "name": "학생회관",
+      "lat": 37.5016,
+      "lng": 126.9593,
+      "amenities": { "elevator": false, "ramp": true, "autoDoor": true }
+
+    }
+  ],
+  "realtime": {
+    "elevators": {
+      "김수환관_E1": { "waitSec": 120, "status": "busy" },
+      "도서관_E2": { "waitSec": 40,  "status": "ok" }
+    }
+  }
+}

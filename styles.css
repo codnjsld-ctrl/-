@@ -1,0 +1,234 @@
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial}
+.topbar{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 14px;background:#f5f7fb;border-bottom:1px solid #e5e7eb}
+.topbar h1{font-size:16px;margin:0}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+main{display:grid;grid-template-columns:1fr 340px;height:calc(100vh - 56px)}
+#map{width:100%;height:100%}
+#panel{padding:12px;overflow:auto;border-left:1px solid #e5e7eb;background:#fff}
+#panel h2,#panel h3{margin:6px 0}
+#panel input{width:100%;margin:6px 0;padding:8px}
+button{padding:8px 10px;border:1px solid #d1d5db;border-radius:10px;background:#fff;cursor:pointer}
+button:hover{background:#f3f4f6}
+#info{font-size:14px;line-height:1.4}
+.marker-badge{display:inline-block;margin-right:6px;padding:2px 6px;border-radius:8px;font-size:12px;background:#eef2ff;border:1px solid #c7d2fe}
+
+#coordbox{
+  position:fixed; left:10px; bottom:10px; 
+  background:rgba(0,0,0,.7); color:#fff; 
+  padding:6px 10px; border-radius:8px; 
+  font-size:12px; z-index:1000; 
+  pointer-events:none; user-select:text;
+}
+.step-pin {
+  background:#2563eb; color:#fff; border-radius:9999px;
+  width:26px; height:26px; line-height:26px; text-align:center;
+  border:2px solid #fff; box-shadow:0 1px 4px rgba(0,0,0,.25);
+  font-weight:700;
+}
+
+/* 패널 레이아웃 */
+#panel section{padding:12px 10px;border-bottom:1px solid #eef2f7}
+#panel h2{margin:0 0 8px;font-size:16px}
+#panel h3{margin:12px 0 6px;font-size:14px;color:#334155}
+
+/* 길찾기 폼 카드 느낌 */
+.route-form{
+  background:#f8fafc;border:1px solid #e2e8f0;border-radius:12px;margin:10px;
+  box-shadow:0 1px 2px rgba(0,0,0,.04);
+}
+.route-form label{display:block;margin:8px 0}
+.route-form input{width:100%;padding:10px;border:1px solid #d1d5db;border-radius:10px}
+.route-form button{width:100%;margin-top:8px;padding:10px;border-radius:12px}
+
+/* 정보 패널 카드 */
+.info-panel{
+  background:#fff;border:1px solid #e2e8f0;border-radius:12px;margin:10px;
+  box-shadow:0 1px 2px rgba(0,0,0,.04);
+}
+#info{font-size:14px;line-height:1.5}
+
+/* ===== 단계 리스트(색 동그라미 번호) ===== */
+ol.steps{counter-reset: step;margin:8px 0 0 0;padding:0}
+ol.steps li{
+  list-style:none; position:relative; padding-left:40px;
+  margin:10px 0; line-height:1.45; background:#f9fafb;border:1px solid #eef2f7;border-radius:10px;padding:10px 10px 10px 44px;
+}
+ol.steps li::before{
+  counter-increment: step; content: counter(step);
+  position:absolute; left:10px; top:50%; transform:translateY(-50%);
+  width:24px; height:24px; border-radius:9999px;
+  background:#2563eb; color:#fff; font-weight:700;
+  display:flex; align-items:center; justify-content:center;
+  box-shadow:0 1px 2px rgba(0,0,0,.15);
+}
+
+/* 좌하단 오버레이 카드 */
+#rt-widget{
+  position:fixed; left:12px; bottom:12px; z-index:1000;
+  max-width:360px; width:calc(100vw - 24px);
+  background:#fff; border:1px solid #e5e7eb; border-radius:14px;
+  box-shadow:0 8px 24px rgba(0,0,0,.12);
+  padding:10px 12px; font-size:13px; line-height:1.25;
+}
+#rt-widget h4{ margin:2px 0 8px; font-size:13px; color:#334155; }
+
+/* 타일 그리드 */
+.rt-grid{ display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:8px; }
+.rt-tile{ border:1px solid #eef2f7; border-radius:10px; padding:8px; background:#f8fafc; }
+.rt-name{ font-weight:600; color:#1f2937; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-bottom:6px; }
+.rt-badge{
+  height:28px; border-radius:8px; display:flex; align-items:center; justify-content:center;
+  font-weight:700; letter-spacing:.2px; color:#fff;
+}
+
+/* 상태 색상 (버스 혼잡도 느낌) */
+.rt-ok   { background:#16a34a; } /* 여유(초록) */
+.rt-norm { background:#0ea5e9; } /* 보통(파랑) */
+.rt-busy { background:#ef4444; } /* 혼잡(빨강) */
+.rt-warn { background:#f59e0b; } /* 점검/주의(주황) */
+
+@media (max-width: 520px){
+  .rt-grid{ grid-template-columns:1fr; }
+}
+
+/* ===== 모바일: 위 지도 / 아래 2열 패널 ===== */
+@media (max-width: 768px){
+  body, html { height:100%; overflow:hidden; }
+
+  .topbar { flex-direction: column; gap: 8px; }
+  .actions { flex-wrap: wrap; }
+
+  main{
+    display:flex;
+    flex-direction:column;
+    height:calc(100vh - 56px); /* 헤더 제외 */
+  }
+  #map{
+    flex:1 1 auto;
+    width:100%;
+    height:60vh; /* 지도 위쪽 60% */
+  }
+  #panel{
+    flex:0 0 auto;
+    width:100%;
+    height:40vh;
+    border-left:none;
+    border-top:1px solid #e5e7eb;
+    overflow:hidden;       /* 내부 스크롤은 자식에서 */
+    background:#fff;
+    padding:0;
+  }
+
+  /* 패널 내부 2열 그리드 */
+ .panel-grid{
+  display:grid;
+  grid-template-columns: 1.4fr 1fr; /* 좌:우 비율을 반대로 */
+  gap:8px;
+  height:100%;
+  padding:10px;
+}
+
+/* 패널 내부 순서를 반대로 (왼쪽 = 길찾기, 오른쪽 = 혼잡도) */
+#panel-left { order: 2; }   /* 혼잡도 → 오른쪽 */
+#panel-right { order: 1; }  /* 길찾기+정보 → 왼쪽 */
+
+
+  #panel-left, #panel-right{
+    overflow:auto;
+    background:#fff;
+    border:1px solid #e2e8f0;
+    border-radius:12px;
+    padding:10px;
+  }
+
+  #panel-left h2, #panel-right h2{ margin-top:0; }
+
+  /* 혼잡 타일 그리드는 기존 스타일 재사용 */
+  /* 오버레이 위젯은 모바일에서 숨김 (중복 렌더 방지) */
+  #rt-widget{ display:none; }
+
+  #coordbox{ display:none; }
+}
+
+/* ===== UI 스케일 변수: 여기서 전체 밀도 조절(0.75 = 75%) ===== */
+:root{
+  --ui-scale: 0.75;
+  --topbar-h: 56px;            /* 헤더 높이(필요시 조정) */
+
+  /* 글자 기본값(브라우저 기본 16px 기준) */
+  --font-base: calc(16px * var(--ui-scale));
+
+  /* 공통 여백/라운드/컨트롤 높이 */
+  --space-1: calc(4px  * var(--ui-scale));
+  --space-2: calc(8px  * var(--ui-scale));
+  --space-3: calc(12px * var(--ui-scale));
+  --radius:  calc(10px * var(--ui-scale));
+  --ctl-h:   calc(40px * var(--ui-scale));
+}
+
+/* 폰트 사이즈만 전역 축소 — 레이아웃은 그대로 100vh 유지 */
+html { font-size: var(--font-base); }
+
+/* 전체를 뷰포트에 꽉 채움 (transform 안 씀) */
+html, body{
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* 상단바/메인 레이아웃은 “정확한 높이”로 */
+.topbar{
+  padding: var(--space-2) var(--space-3);
+}
+main{
+  height: calc(100vh - var(--topbar-h));
+}
+
+
+/* ===== 상단바 미니 길찾기 ===== */
+.route-mini{
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  background: #fff;
+}
+
+.route-mini input{
+  width: 140px;               /* 필요하면 120~160px로 조절 */
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.route-mini .sep{
+  color:#94a3b8;
+  font-weight:700;
+  user-select:none;
+}
+
+.route-mini button{
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: #2563eb;
+  color:#fff;
+  font-weight:600;
+}
+.route-mini button:hover{ filter:brightness(1.05); }
+
+/* 상단바 줄바꿈 대응 */
+@media (max-width: 900px){
+  .actions{ gap:6px; }
+  .route-mini{ flex-wrap: wrap; padding:6px; }
+  .route-mini input{ width: 120px; }
+}
+@media (max-width: 600px){
+  .route-mini{ width: 100%; }
+  .route-mini input{ flex:1 1 140px; width:auto; }
+}
