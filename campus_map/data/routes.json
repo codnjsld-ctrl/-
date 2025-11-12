@@ -1,0 +1,48 @@
+{
+  "nodes": {
+    "gate": {
+      "name": "정문",
+      "lat": 37.485937,
+      "lng": 126.804693
+    },
+    "kimsu_enter": {
+      "name": "김수환관 출입구",
+      "lat": 37.485597,
+      "lng": 126.803719
+    },
+    "kimsu_elev1": {
+      "name": "김수환관 1층 엘리베이터",
+      "lat": 37.485438,
+      "lng": 126.803593
+    },
+    "kimsu_4f_exit": {
+      "name": "김수환관 4층 출구",
+      "lat": 37.485494,
+      "lng": 126.803255
+    },
+    "maria_enter": {
+      "name": "마리아관 1층 입구",
+      "lat": 37.486209,
+      "lng": 126.802526
+    },
+    "maria_elev1": {
+      "name": "마리아관 1층 엘리베이터",
+      "lat": 37.486392,
+      "lng": 126.802590
+    },
+    "maria_4f_class": {
+      "name": "마리아관 4층 강의실 (M407)",
+      "lat": 37.486363,
+      "lng": 126.802751
+    }
+  },
+  "path": [
+    "gate",
+    "kimsu_enter",
+    "kimsu_elev1",
+    "kimsu_4f_exit",
+    "maria_enter",
+    "maria_elev1",
+    "maria_4f_class"
+  ]
+}

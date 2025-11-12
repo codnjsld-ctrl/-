@@ -1,0 +1,11 @@
+{
+  "elevators": {
+    "김수환관 엘리베이터": { "waitSec": 15, "status": "혼잡" },
+    "마리아관 엘리베이터": { "waitSec": 5, "status": "여유" },
+    "도서관 엘리베이터": { "waitSec": 20, "status": "혼잡" }
+  },
+  "doors": {
+    "김수환관 자동문": { "useFreq": "높음", "status": "활발" },
+    "도서관 자동문": { "useFreq": "보통", "status": "보통" }
+  }
+}
